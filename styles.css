@@ -1,0 +1,80 @@
+html, body{
+	background:#F2F2F2;
+	font-family:'The Message DemiBold', Arial, sans-serif;
+}
+
+#configDiv{
+	position:absolute;
+	margin-left:58%	;
+	text-align:right;
+}
+
+.actionButton {
+	border: 0px;
+	background-color: #008B00;
+	color: #FFFFFF;
+	font-size: 17;
+}
+
+.searchBoxDiv{
+	background: #003366;
+	width:500px;
+	margin:auto;
+}
+
+.searchBoxDiv div, .selectedItemsTable td, .article.summary{
+	padding-left:10px;	
+}
+
+.radioSearch, .searchSpan{
+	padding-left:5px;	
+}
+
+.article.title{
+	background: #003366;
+}
+
+.searchOptionsDiv{
+	padding-bottom: 20px;
+	padding-top: 1px;
+	background: #FFFFFF;
+	height: 40px;
+}
+
+.resultsRightDiv{
+	width: 33%; 
+	margin-left:65%;
+    position: absolute;
+	padding-top: 5px;
+}
+.resultsLeftDiv{
+	width: 65%; 
+	float:left;
+	padding-top: 5px;
+}
+
+.article.title, .selectedItemsTable th{
+	text-align:center;
+	color:#FFFFFF;	
+	margin:0px;
+}
+
+.resultItemDiv, .selectedItemsTable , .articleModelDiv{
+	margin-left:10px;
+	margin:0px 0px 10px 5px;
+	padding-bottom:10px;
+	width:100%;
+	background:#FFFFFF;
+}
+.article.title.section {
+	background:#FFFFFF;
+	color:#003366;
+	text-align:left;
+}
+h4.article.title.section {
+	font-size:90%;
+	margin-left:20px;
+}
+.link{
+	cursor:pointer;
+}
