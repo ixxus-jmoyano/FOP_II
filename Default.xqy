@@ -126,7 +126,7 @@ xdmp:set-response-content-type("text/html"),
 				</div>				
 				<div class="resultsRightDiv">
 				{
-					let $selection := xdmp:get-session-field($CONSTANTS:composedArticle, "NONE")
+					let $selection := xdmp:get-session-field($CONSTANTS:selectionsFile, "NONE")
 					return
 						if($selection != "NONE" and fn:count( $selection/item) !=0 ) then
 							<div class="resultItemDiv">
@@ -135,15 +135,8 @@ xdmp:set-response-content-type("text/html"),
 								</h1>
 								<h3 class="article title section" style="display:inline;">
 									Title:<input type="text" id="PublishTitle"/>
-									<input type="button" class="actionButton" value="Generate Publication" onclick="javascript:Publish()"/>
+									<input type="button" class="actionButton" value="Generate Publication" onclick="javascript:openWindow('Publish.xqy?PublishTitle=' + document.getElementById('PublishTitle').value)"/>
 								</h3>
-								<script language="JavaScript">
-									function Publish()
-									{{
-									  window.open("Publish.xqy?PublishTitle=" + document.getElementById('PublishTitle').value, "Publish", "height=700,width=600,scrollbars=yes,location=no").focus();
-									}}
-								</script>
-								
 									{
 									for $item in $selection/item/text()
 										let $article := MODEL:getXMLFromID($item)

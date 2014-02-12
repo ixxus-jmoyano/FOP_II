@@ -13,7 +13,7 @@ declare function getUserName()
   then
     fn:doc("/Config/Settings.xml")/Configs/UserName/text()
   else
-    "admim"
+    "admin"
 };
 
 declare function getPassword()
@@ -22,7 +22,7 @@ declare function getPassword()
   then
     fn:doc("/Config/Settings.xml")/Configs/Password/text()
   else
-    "admim"
+    "admin"
 };
 
 
