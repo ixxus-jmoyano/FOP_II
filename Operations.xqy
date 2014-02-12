@@ -1,6 +1,8 @@
 module namespace OPERATIONS = "http://ixxus.com/operations";
 import module namespace mem = "http://xqdev.com/in-mem-update" at "in-mem-update.xqy";
 import module namespace CONSTANTS = "http://ixxus.com/constants" at "Constants.xqy";
+import module namespace CONFIG = "http://ixxus.com/ManageConfigs" at "ManageConfigs.xqy";
+
 
 (: Operation Add Article to the composed Article :)
 declare variable $addArticleOp as xs:string := "addArticle";
@@ -13,6 +15,10 @@ declare variable $upArticleOp as xs:string := "upArticle";
 
 (: Operation change the position of the article by giving it a lower position :)
 declare variable $downArticleOp as xs:string := "downArticle";
+
+(: Operation change Alfresco Credentials :)
+declare variable $changeCredentials as xs:string := "ChangeAlfrescoCredentials";
+
 
 declare function doOperations($operation)
 {	
@@ -79,5 +85,10 @@ declare function doOperations($operation)
 					()
 			)
 		else
-			()
+		 if ($operation=$changeCredentials) then
+			CONFIG:setData(xdmp:get-request-field("UserName"), 
+						   xdmp:get-request-field("Password"),
+						   xdmp:get-request-field("SendXMLURL"))
+		  else
+		  ()
 };

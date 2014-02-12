@@ -53,39 +53,37 @@ else
 
   <body>
       
-      <div class="Panel">
-         <div class="PanelHeader">Alfresco Interaction Settings</div>    
-         <h3 class="article title section">Enter username and password, and call to return PDF and ePUB</h3>
-         <div style="margin-left:20px">
-           <div class="Para">             
-           {
-             let $name := CONFIG:getUserName()
-             let $password := CONFIG:getPassword()
-             let $sendXMLURL := CONFIG:getSendXMLURL()
-             return
-               <form name="ChangeCredentials" style="margin:0px;" method="post" action="Configuration.xqy">
-                 <input type="hidden" name="Operation" value="ChangeAlfrescoCredentials"/>
+	<div class="resultItemDiv">
+		<h1 class="article title">Alfresco Interaction Settings</h1>    
+		<div class="article summary">
+		<p class="article summary"><h3 class="article title section">Enter username and password, and call to return PDF and ePUB</h3></p>
+			{
+			let $name := CONFIG:getUserName()
+			let $password := CONFIG:getPassword()
+			let $sendXMLURL := CONFIG:getSendXMLURL()
+			return
+				<form name="ChangeCredentials" style="margin:0px;" method="post" action="Configuration.xqy">
+						<input type="hidden" name="Operation" value="ChangeAlfrescoCredentials"/>
 
-                 <h3 class="article title section">
-                   Name:
-                   <input type="text" size="120" style="font-size:11px;" name="UserName" value="{$name}"></input>
-                 </h3>
+						<h3 class="article title section">
+							Name:
+							<input type="text" size="120" style="font-size:11px;" name="UserName" value="{$name}"></input>
+						</h3>
 
-                 <h3 class="article title section">
-                   Password:
-                   <input type="text" size="120" style="font-size:11px;" name="Password" value="{$password}"></input>
-                 </h3>
+						<h3 class="article title section">
+							Password:
+							<input type="text" size="112" style="font-size:11px;" name="Password" value="{$password}"></input>
+						</h3>
 
-                 <h3 class="article title section">
-                   URL To Send XML:
-                   <input type="text" size="120" style="font-size:11px;" name="SendXMLURL" value="{$sendXMLURL}"></input>
-                 </h3>
-
-                 <input type="button" value="Update" class="actionButton" onClick="submit()"/>
-               </form>
-           }
-           </div>            
-         </div>
-      </div>
+						<h3 class="article title section">
+							URL To Send XML:
+							<input type="text" size="97" style="font-size:11px;" name="SendXMLURL" value="{$sendXMLURL}"></input>
+						</h3>
+						
+						<input type="button" value="Update" class="actionButton" onClick="submit()"/>
+				</form>
+			}
+		</div>
+	</div>
   </body>
 </html>

@@ -1,6 +1,11 @@
 import module namespace OPERATIONS = "http://ixxus.com/operations" at "Operations.xqy";
 
-OPERATIONS:doOperations(xdmp:get-request-field("operation", "NONE")),
+if (xdmp:get-current-user() = "BAPAS-unknown")
+then
+  ( )
+else
+	OPERATIONS:doOperations(xdmp:get-request-field("operation", "NONE"))
+,
 
 xdmp:log(fn:concat("Operation performed [",xdmp:get-request-field("operation"),"]"));
 
