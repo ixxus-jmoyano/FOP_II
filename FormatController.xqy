@@ -4,15 +4,15 @@ import module namespace MODEL = "http://ixxus.com/articlemodel" at "ArticleModel
 import module namespace OPERATIONS = "http://ixxus.com/operations" at "Operations.xqy";
 import module namespace CONSTANTS = "http://ixxus.com/constants" at "Constants.xqy";
 
-declare function childrenInline ($node)
+declare function childrenInline ($node, $linkDisplay as xs:string)
 {
   for $L as node() in $node/node() 
   return 
-      loopInline($L)
+      loopInline($L, $linkDisplay)
 };
 
 
-declare function loopInline ($node as node()) 
+declare function loopInline ($node as node(),  $linkDisplay as xs:string) 
 {
 typeswitch ($node)
 
@@ -28,24 +28,24 @@ typeswitch ($node)
 	 return
 	   if ($node/node())
 	   then
-		 <i>{childrenInline($node)}</i>
+		 <i>{childrenInline($node, $linkDisplay)}</i>
 	   else ( )
 	  
 	case element(b)
 	 return
 	   if ($node/node())
 	   then
-		 <b>{childrenInline($node)}</b>
+		 <b>{childrenInline($node, $linkDisplay)}</b>
 	   else ( )
 
 	case $x as element(summary)
 	return
-		<p class="article summary">{childrenInline($node)}</p>
+		<p class="article summary">{childrenInline($node, $linkDisplay)}</p>
 		
 	case $x as element(table)
 	return
 		if($x[@class!="navbox"]) then
-			<table>{childrenInline($node)}</table>
+			<table>{childrenInline($node, $linkDisplay)}</table>
 		else
 			()
 	 
@@ -53,7 +53,7 @@ typeswitch ($node)
 	return
 		if ($node/node())
 		then
-			<tr>{childrenInline($node)}</tr>
+			<tr>{childrenInline($node, $linkDisplay)}</tr>
 		else
 			()
 		
@@ -61,7 +61,7 @@ typeswitch ($node)
 	return
 		if ($node/node())
 		then
-			<td>{childrenInline($node)}</td>
+			<td>{childrenInline($node, $linkDisplay)}</td>
 		else
 			()
 			
@@ -69,7 +69,7 @@ typeswitch ($node)
 	return
 		if ($node/node())
 		then
-			<th>{childrenInline($node)}</th>
+			<th>{childrenInline($node, $linkDisplay)}</th>
 		else
 			()
 			
@@ -77,7 +77,7 @@ typeswitch ($node)
 	return
 		if ($node/node())
 		then
-			<ul>{childrenInline($node)}</ul>
+			<ul>{childrenInline($node, $linkDisplay)}</ul>
 		else
 			()
 			
@@ -85,7 +85,7 @@ typeswitch ($node)
 	return
 		if ($node/node())
 		then
-			<li>{childrenInline($node)}</li>
+			<li>{childrenInline($node, $linkDisplay)}</li>
 		else
 			()
 			
@@ -93,28 +93,33 @@ typeswitch ($node)
 	return
 		if ($node/node())
 		then
-			<p class="article section content">{childrenInline($node)}</p>
+			<p class="article section content">{childrenInline($node, $linkDisplay)}</p>
 		else
 		()
 		
 	case $x as element(title)
 	return
 		(:Main article title:)
-		if ($x/parent::article) then
-			<h1 class="article title">{childrenInline($node)}</h1>
-		else
-		(:Nested section title:)
+		
 		let $id := $x/parent::*/@id
 		return
+		if ($x/parent::article) then
+			<h1 class="article title" id="{$id}">{childrenInline($node, $linkDisplay)}</h1>
+		else
+		(:Nested section title:)
 			if($x/parent::*/ancestor::section) then
 				(
 					let $articleUri := xdmp:get-request-field($CONSTANTS:articleUri, "NONE")
 					return
 					<h4 class="article title section" id="{$id}">
-						{childrenInline($node)}
-						<a class="link" href="ArticleDetails.xqy?{$CONSTANTS:articleUri}={$articleUri}&amp;{$CONSTANTS:paramOperation}={$OPERATIONS:addArticleOp}&amp;{$CONSTANTS:articleSection}={$id}#{$id}">
-							<img src="/Images/plus.png" width="15" title="Add Section to Publication"/>
-						</a>
+						{childrenInline($node, $linkDisplay)}
+						{
+						if($linkDisplay = "Y") then
+							<a class="link" href="ArticleDetails.xqy?{$CONSTANTS:articleUri}={$articleUri}&amp;{$CONSTANTS:paramOperation}={$OPERATIONS:addArticleOp}&amp;{$CONSTANTS:articleSection}={$id}#{$id}">
+								<img src="/Images/plus.png" width="15" title="Add Section to Publication"/>
+							</a>
+						else()
+						}
 					</h4>
 				)
 			(:Section title:)
@@ -122,10 +127,14 @@ typeswitch ($node)
 				let $articleUri := xdmp:get-request-field($CONSTANTS:articleUri, "NONE")
 				return
 				<h3 class="article title section" id="{$id}">
-					{childrenInline($node)}
-						<a class="link" href="ArticleDetails.xqy?{$CONSTANTS:articleUri}={$articleUri}&amp;{$CONSTANTS:paramOperation}={$OPERATIONS:addArticleOp}&amp;{$CONSTANTS:articleSection}={$id}#{$id}">
-							<img src="/Images/plus.png" width="15" title="Add Section to Publication"/>
-						</a>
+					{childrenInline($node, $linkDisplay)}
+						{
+						if($linkDisplay = "Y") then
+							<a class="link" href="ArticleDetails.xqy?{$CONSTANTS:articleUri}={$articleUri}&amp;{$CONSTANTS:paramOperation}={$OPERATIONS:addArticleOp}&amp;{$CONSTANTS:articleSection}={$id}#{$id}">
+								<img src="/Images/plus.png" width="15" title="Add Section to Publication"/>
+							</a>
+						else()
+						}
 				</h3>
 			
 			
@@ -134,7 +143,7 @@ typeswitch ($node)
 	if(fn:count($x/triple)>0) then
 		<span>
 			<h3 class="article title section">Related Links</h3>
-			{childrenInline($node)}
+			{childrenInline($node, $linkDisplay)}
 		</span>
 	else
 		()
@@ -144,7 +153,7 @@ typeswitch ($node)
 	if(fn:count($x/triple)>0) then
 		<span>
 			<h3 class="article title section">Related Images</h3>
-			{childrenInline($node)}
+			{childrenInline($node, $linkDisplay)}
 		</span>
 	else
 		()
@@ -172,7 +181,7 @@ typeswitch ($node)
 
 	default 
 	 return
-	   childrenInline($node)
+	   childrenInline($node, $linkDisplay)
 };
 
 declare function createIndex($node as node()){

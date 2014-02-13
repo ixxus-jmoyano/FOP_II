@@ -15,6 +15,9 @@ declare variable $publicationTitle as xs:string := "publicationTitle";
 (: Var used to recover the parameter article URI :)
 declare variable $articleUri as xs:string := "articleUri";
 
+(: Var used to recover the parameter article Id :)
+declare variable $articleId as xs:string := "articleId";
+
 (: Var used to recover the parameter article Section :)
 declare variable $articleSection as xs:string := "articleSection";
 

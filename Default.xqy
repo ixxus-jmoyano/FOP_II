@@ -148,13 +148,13 @@ xdmp:set-response-content-type("text/html"),
 													<div class="resultsLeftDiv"><p class="article summary">{MODEL:getArticleTitle($article)}</p></div>
 											}
 											<div class="resultsRightDiv">
-											<a href="Default.xqy?{$CONSTANTS:paramOperation}={$OPERATIONS:removeArticleOp}&amp;{$CONSTANTS:articleUri}={$item/text()}&amp;{$CONSTANTS:searchType}={$searchType}&amp;{$CONSTANTS:searchTerm}={$searchTerm}">
+											<a href="Default.xqy?{$CONSTANTS:paramOperation}={$OPERATIONS:removeArticleOp}&amp;{$CONSTANTS:articleId}={$item/@id}&amp;{$CONSTANTS:searchType}={$searchType}&amp;{$CONSTANTS:searchTerm}={$searchTerm}">
 												<img src="/Images/remove_article.png" title="remove article" width="50"/>
 											</a>
-											<a href="Default.xqy?{$CONSTANTS:paramOperation}={$OPERATIONS:upArticleOp}&amp;{$CONSTANTS:articleUri}={$item/text()}&amp;{$CONSTANTS:searchType}={$searchType}&amp;{$CONSTANTS:searchTerm}={$searchTerm}">
+											<a href="Default.xqy?{$CONSTANTS:paramOperation}={$OPERATIONS:upArticleOp}&amp;{$CONSTANTS:articleId}={$item/@id}&amp;{$CONSTANTS:searchType}={$searchType}&amp;{$CONSTANTS:searchTerm}={$searchTerm}">
 												<img src="/Images/up_article.png" title="up article" width="50"/>
 											</a>
-											<a href="Default.xqy?{$CONSTANTS:paramOperation}={$OPERATIONS:downArticleOp}&amp;{$CONSTANTS:articleUri}={$item/text()}&amp;{$CONSTANTS:searchType}={$searchType}&amp;{$CONSTANTS:searchTerm}={$searchTerm}">
+											<a href="Default.xqy?{$CONSTANTS:paramOperation}={$OPERATIONS:downArticleOp}&amp;{$CONSTANTS:articleId}={$item/@id}&amp;{$CONSTANTS:searchType}={$searchType}&amp;{$CONSTANTS:searchTerm}={$searchTerm}">
 												<img src="/Images/down_article.png" title="down article" width="50"/>
 											</a>
 											</div>

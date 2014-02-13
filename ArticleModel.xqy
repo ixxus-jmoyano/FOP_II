@@ -23,3 +23,7 @@ declare function getArticleSection($xml, $id){
 declare function getArticleUri($xml){	
 	fn:base-uri($xml)
 };	
+
+declare function getArticleId($xml){	
+	$xml/article/@id
+};	

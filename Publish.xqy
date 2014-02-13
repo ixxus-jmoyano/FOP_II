@@ -135,7 +135,7 @@ return
 		for $article in $publicationFile/Articles 
 			return
 			<div class="articleModelDiv">
-				{ELEMENTPROCESS:childrenInline($article)}
+				{ELEMENTPROCESS:childrenInline($article, "N")}
 			</div>
 		}
 	</body>

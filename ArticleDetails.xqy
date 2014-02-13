@@ -30,7 +30,7 @@ return
 	</head>
 	<body>
 		<div class="articleModelDiv">
-			{ELEMENTPROCESS:childrenInline($article)}
+			{ELEMENTPROCESS:childrenInline($article, "Y")}
 		</div>
 	</body>
 </html>
