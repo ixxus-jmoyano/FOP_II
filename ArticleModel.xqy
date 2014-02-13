@@ -12,6 +12,14 @@ declare function getArticleTitle($xml){
 	fn:data($xml/article/title)
 };	
 
+declare function getArticleSectionTitle($xml, $id){
+	fn:data($xml/article//section[@id=$id]/child::*[1])
+};	
+
+declare function getArticleSection($xml, $id){
+	$xml/article//section[@id=$id]
+};	
+
 declare function getArticleUri($xml){	
 	fn:base-uri($xml)
 };	

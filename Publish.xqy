@@ -5,35 +5,49 @@ import module namespace CONSTANTS = "http://ixxus.com/constants" at "Constants.x
 (: TRANSACTION 1 - CREATE PUBLICATION XML :)
 
 let $selectionsFile := xdmp:get-session-field($CONSTANTS:selectionsFile, "NONE")
-let $publishTitle := xdmp:get-request-field("PublishTitle", "NONE")
+let $publishTitle := xdmp:get-request-field($CONSTANTS:publicationTitle, "NONE")
+let $_ := xdmp:log(fn:concat("PUBLISH ARTICLE TITLE",$publishTitle))
 let $xml :=
       <Publication>
-        <Title>{$publishTitle}</Title>
-        <TOC>
+        <title>{$publishTitle}</title>
+        <h1>Index of Chapters</h1>
+		<ul>
         {
           for $articleUri in $selectionsFile/item/text()
 			  let $article := MODEL:getXMLFromID($articleUri)
 			  return
-				<Entry>{MODEL:getArticleTitle($article)}</Entry>
+				<li>{MODEL:getArticleTitle($article)}</li>
         }
-        </TOC>
+        </ul>
         <Articles>
         {
-          for $articleUri in $selectionsFile/item/text()
-		  let $article := MODEL:getXMLFromID($articleUri)
-          return
-            $article/article
+			for $item in $selectionsFile/item
+				let $xml := MODEL:getXMLFromID($item/text())
+				let $article := if($item/@type="article") then
+									($xml)
+								else
+									let $section := MODEL:getArticleSection($xml, $item/@id)
+									let $result := <article id="{$item/@id}">
+														<title>{MODEL:getArticleTitle($xml)} ({MODEL:getArticleSectionTitle($xml, $item/@id)})</title>
+														<summary>{$section/content/p}</summary>
+														{$section/sections}
+													</article>
+									(:let $_:= xdmp:save("/test/result.xml", $result):)
+									return
+										$result
+				return
+					$article/article
         }
         </Articles>
       </Publication>
-let $_ := xdmp:set-session-field($CONSTANTS:publicationFile, $xml)    
+	let $_ := xdmp:set-session-field($CONSTANTS:publicationFile, $xml)    
 	return
 		()
 ;
 
 
 (: TRANSACTION 2 - SEND PUBLICATION TO ALFRESCO (to generate PDF and ePUB) :)
-import module namespace CONSTANTS = "http://ixxus.com/constants" at "Constants.xqy";
+(:import module namespace CONSTANTS = "http://ixxus.com/constants" at "Constants.xqy";
 import module namespace CONFIG = "http://ixxus.com/ManageConfigs"  at "ManageConfigs.xqy";
 
 let $publicationFile := xdmp:get-session-field($CONSTANTS:publicationFile, "NONE")
@@ -73,12 +87,11 @@ return
         ( )
     )
 	}catch($error){
-		xdmp:log( fn:concat("ERROR: ", xdmp:quote($error) ) )
+		xdmp:log( fn:concat("ERROR: ", xdmp:quote($error/error:message) ) )
 	}
   else
     ( )
-(: WAIT FOR RESPONSE :)
-;
+;:)
 
 import module 	namespace CONSTANTS = "http://ixxus.com/constants" at "Constants.xqy";
 
@@ -92,7 +105,7 @@ let $publicationFile := xdmp:get-session-field($CONSTANTS:publicationFile, "NONE
 return
   <html>
     <head>
-	      <title>{$publicationFile/Title}</title>
+	      <title>{$publicationFile/title/text()}</title>
 		  <meta http-equiv="X-UA-Compatible" content="IE=EmulateIE7" />
 		  <link rel="stylesheet" type="text/css" href="styles.css?refresh{current-dateTime()}" />
 		  <meta http-equiv='Content-Type' content='text/html;charset=utf-8' />
@@ -103,7 +116,19 @@ return
 		  <script type="text/javascript">function doPrint( ) {{ this.print() }} function doClose( ) {{ this.close() }}</script>
 	</head>
 	<body>
-		<h1 class="article title">{$publicationFile/Title}</h1>
+		<div class="articleModelDiv">
+			<h1 class="article title">{$publicationFile/title/text()}</h1>
+		    <h3 class="article title section">Index of Chapters</h3>
+			<p class="article summary">	
+				<ul>
+				{
+				  for $ul in $publicationFile/ul
+					  return
+						$ul
+				}
+				</ul>
+			</p>
+		</div>
 		{
 		for $article in $publicationFile/Articles 
 			return

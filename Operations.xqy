@@ -19,33 +19,43 @@ declare variable $downArticleOp as xs:string := "downArticle";
 (: Operation change Alfresco Credentials :)
 declare variable $changeCredentials as xs:string := "ChangeAlfrescoCredentials";
 
+declare private function getItem($articleUri, $id){
+	let $item := if($id) then 
+					<item type="section" id="{$id}">{$articleUri}</item>
+				 else
+					<item type="article">{$articleUri}</item>
+	let $_ := xdmp:log(fn:concat("Item Added [", $item,"->type:", $item/@type,"->id:",$item/@id, "]"))
+	return
+		$item
+};
 
 declare function doOperations($operation)
 {	
 	let $selectionsFile := xdmp:get-session-field($CONSTANTS:selectionsFile, "NONE")
-	let $CONSTANTS:articleUri := xdmp:get-request-field($CONSTANTS:articleUri, "NONE")
-	let $log := xdmp:log(fn:concat("Operation: [",$operation,"] Article Uri [",$CONSTANTS:articleUri,"], generatedDocument[",$selectionsFile, "]"))
+	let $articleUri := xdmp:get-request-field($CONSTANTS:articleUri, "NONE")
+	let $sectionId := xdmp:get-request-field($CONSTANTS:articleSection)
+	let $log := xdmp:log(fn:concat("Operation: [",$operation,"] Article Uri [",$articleUri,"], generatedDocument[",$selectionsFile, "], sectionId[",$sectionId,"]"))
 	return 
 		if($operation = $addArticleOp) then 
-			(		
+			(
 			if($selectionsFile = "NONE") then
-					xdmp:set-session-field($CONSTANTS:selectionsFile, <sessionwrapper><item type="uri">{$CONSTANTS:articleUri}</item></sessionwrapper>) 	
+					xdmp:set-session-field($CONSTANTS:selectionsFile, <sessionwrapper>{OPERATIONS:getItem($articleUri, $sectionId)}</sessionwrapper>) 	
+			else
+				if(cts:contains($selectionsFile/item, $articleUri)) then
+					xdmp:log(fn:concat("The article ", $articleUri, " has already been added"))
 				else
-					if(cts:contains($selectionsFile/item, $CONSTANTS:articleUri)) then
-						xdmp:log(fn:concat("The article ", $CONSTANTS:articleUri, " has already been added"))
-					else
-						let $insert :=  mem:node-insert-child( $selectionsFile, <item type="uri">{$CONSTANTS:articleUri}</item>)
-						let $log := xdmp:log(fn:concat("Document Generated [",$insert,"]"))
-						let $save := xdmp:set-session-field($CONSTANTS:selectionsFile, $insert) 		
-						return
-							()
+					let $insert :=  mem:node-insert-child( $selectionsFile,OPERATIONS:getItem($articleUri, $sectionId))
+					let $log := xdmp:log(fn:concat("Document Generated [",$insert,"]"))
+					let $save := xdmp:set-session-field($CONSTANTS:selectionsFile, $insert) 		
+					return
+						()
 			)
 		else
 		if($operation = $removeArticleOp) then 
 			(
-			if(cts:contains($selectionsFile/item, $CONSTANTS:articleUri)) then
+			if(cts:contains($selectionsFile/item, $articleUri)) then
 				(
-				let $save := xdmp:set-session-field($CONSTANTS:selectionsFile, mem:node-delete($selectionsFile/item[text()=$CONSTANTS:articleUri])) 
+				let $save := xdmp:set-session-field($CONSTANTS:selectionsFile, mem:node-delete($selectionsFile/item[text()=$articleUri])) 
 					return
 					()
 				)
@@ -55,7 +65,7 @@ declare function doOperations($operation)
 		else
 		if($operation = $upArticleOp) then 
 			(
-			let $node := $selectionsFile/item[text()=$CONSTANTS:articleUri]
+			let $node := $selectionsFile/item[text()=$articleUri]
 			let $upperNode := $node/preceding-sibling::item[1]
 			return
 				if($upperNode) then
@@ -71,7 +81,7 @@ declare function doOperations($operation)
 		else
 		if($operation = $downArticleOp) then 
 			(
-			let $node := $selectionsFile/item[text()=$CONSTANTS:articleUri]
+			let $node := $selectionsFile/item[text()=$articleUri]
 			let $nextNode := $node/following-sibling::item[1]
 			return
 				if($nextNode) then

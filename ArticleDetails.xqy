@@ -1,7 +1,14 @@
-import module 	namespace CONSTANTS = "http://ixxus.com/constants" at "Constants.xqy";
+import module namespace OPERATIONS = "http://ixxus.com/operations" at "Operations.xqy";
+if (xdmp:get-current-user() = "BAPAS-unknown")
+then
+  ( )
+else
+	OPERATIONS:doOperations(xdmp:get-request-field("operation", "NONE"))
+,
+xdmp:log(fn:concat("Article details operation performed [",xdmp:get-request-field("operation"),"]"));
 
+import module namespace CONSTANTS = "http://ixxus.com/constants" at "Constants.xqy";
 import module namespace MODEL = "http://ixxus.com/articlemodel" at "ArticleModel.xqy";
-
 import module namespace ELEMENTPROCESS = "http://ixxus.com/elementprocess" at "FormatController.xqy";
 
 xdmp:set-response-content-type("text/html")

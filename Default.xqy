@@ -134,23 +134,27 @@ xdmp:set-response-content-type("text/html"),
 									Items Selected
 								</h1>
 								<h3 class="article title section" style="display:inline;">
-									Title:<input type="text" id="PublishTitle"/>
-									<input type="button" class="actionButton" value="Generate Publication" onclick="javascript:openWindow('Publish.xqy?PublishTitle=' + document.getElementById('PublishTitle').value)"/>
+									Title:<input type="text" id="{$CONSTANTS:publicationTitle}"/>
+									<input type="button" class="actionButton" value="Generate Publication" onclick="javascript:openWindow('Publish.xqy?{$CONSTANTS:publicationTitle}=' + document.getElementById('{$CONSTANTS:publicationTitle}').value)"/>
 								</h3>
 									{
-									for $item in $selection/item/text()
-										let $article := MODEL:getXMLFromID($item)
+									for $item in $selection/item
+										let $article := MODEL:getXMLFromID($item/text())
 										return	
-										<div style="overflow:auto;">											
-											<div class="resultsLeftDiv"><p class="article summary">{MODEL:getArticleTitle($article)}</p></div>
+										<div style="overflow:auto;">
+											{if($item[@type="section"]) then
+													<div class="resultsLeftDiv"><p class="article summary">{MODEL:getArticleTitle($article)}[Section: {MODEL:getArticleSectionTitle($article, $item/@id)}]</p></div>
+												else
+													<div class="resultsLeftDiv"><p class="article summary">{MODEL:getArticleTitle($article)}</p></div>
+											}
 											<div class="resultsRightDiv">
-											<a href="Default.xqy?{$CONSTANTS:paramOperation}={$OPERATIONS:removeArticleOp}&amp;{$CONSTANTS:articleUri}={$item}&amp;{$CONSTANTS:searchType}={$searchType}&amp;{$CONSTANTS:searchTerm}={$searchTerm}">
+											<a href="Default.xqy?{$CONSTANTS:paramOperation}={$OPERATIONS:removeArticleOp}&amp;{$CONSTANTS:articleUri}={$item/text()}&amp;{$CONSTANTS:searchType}={$searchType}&amp;{$CONSTANTS:searchTerm}={$searchTerm}">
 												<img src="/Images/remove_article.png" title="remove article" width="50"/>
 											</a>
-											<a href="Default.xqy?{$CONSTANTS:paramOperation}={$OPERATIONS:upArticleOp}&amp;{$CONSTANTS:articleUri}={$item}&amp;{$CONSTANTS:searchType}={$searchType}&amp;{$CONSTANTS:searchTerm}={$searchTerm}">
+											<a href="Default.xqy?{$CONSTANTS:paramOperation}={$OPERATIONS:upArticleOp}&amp;{$CONSTANTS:articleUri}={$item/text()}&amp;{$CONSTANTS:searchType}={$searchType}&amp;{$CONSTANTS:searchTerm}={$searchTerm}">
 												<img src="/Images/up_article.png" title="up article" width="50"/>
 											</a>
-											<a href="Default.xqy?{$CONSTANTS:paramOperation}={$OPERATIONS:downArticleOp}&amp;{$CONSTANTS:articleUri}={$item}&amp;{$CONSTANTS:searchType}={$searchType}&amp;{$CONSTANTS:searchTerm}={$searchTerm}">
+											<a href="Default.xqy?{$CONSTANTS:paramOperation}={$OPERATIONS:downArticleOp}&amp;{$CONSTANTS:articleUri}={$item/text()}&amp;{$CONSTANTS:searchType}={$searchType}&amp;{$CONSTANTS:searchTerm}={$searchTerm}">
 												<img src="/Images/down_article.png" title="down article" width="50"/>
 											</a>
 											</div>

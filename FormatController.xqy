@@ -1,6 +1,8 @@
 module namespace ELEMENTPROCESS = "http://ixxus.com/elementprocess";
 
 import module namespace MODEL = "http://ixxus.com/articlemodel" at "ArticleModel.xqy";
+import module namespace OPERATIONS = "http://ixxus.com/operations" at "Operations.xqy";
+import module namespace CONSTANTS = "http://ixxus.com/constants" at "Constants.xqy";
 
 declare function childrenInline ($node)
 {
@@ -97,14 +99,35 @@ typeswitch ($node)
 		
 	case $x as element(title)
 	return
+		(:Main article title:)
 		if ($x/parent::article) then
 			<h1 class="article title">{childrenInline($node)}</h1>
 		else
-		if($x/parent::*/ancestor::section) then
-			<h4 class="article title section">{childrenInline($node)}</h4>
-		else
-			<h3 class="article title section">{childrenInline($node)}</h3>
-		
+		(:Nested section title:)
+		let $id := $x/parent::*/@id
+		return
+			if($x/parent::*/ancestor::section) then
+				(
+					let $articleUri := xdmp:get-request-field($CONSTANTS:articleUri, "NONE")
+					return
+					<h4 class="article title section" id="{$id}">
+						{childrenInline($node)}
+						<a class="link" href="ArticleDetails.xqy?{$CONSTANTS:articleUri}={$articleUri}&amp;{$CONSTANTS:paramOperation}={$OPERATIONS:addArticleOp}&amp;{$CONSTANTS:articleSection}={$id}#{$id}">
+							<img src="/Images/plus.png" width="15" title="Add Section to Publication"/>
+						</a>
+					</h4>
+				)
+			(:Section title:)
+			else
+				let $articleUri := xdmp:get-request-field($CONSTANTS:articleUri, "NONE")
+				return
+				<h3 class="article title section" id="{$id}">
+					{childrenInline($node)}
+						<a class="link" href="ArticleDetails.xqy?{$CONSTANTS:articleUri}={$articleUri}&amp;{$CONSTANTS:paramOperation}={$OPERATIONS:addArticleOp}&amp;{$CONSTANTS:articleSection}={$id}#{$id}">
+							<img src="/Images/plus.png" width="15" title="Add Section to Publication"/>
+						</a>
+				</h3>
+			
 			
 	case $x as element(linkedPages)
 	return
