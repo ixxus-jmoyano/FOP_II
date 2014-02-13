@@ -32,7 +32,7 @@ let $xml :=
 									let $section := MODEL:getArticleSection($xml, $item/@id)
 									let $result := <articles><article type="article" id="{$item/@id}">
 														<title>{MODEL:getArticleTitle($xml)} ({MODEL:getArticleSectionTitle($xml, $item/@id)})</title>
-														<summary>{$section/content/p}</summary>
+														<summary>{$section/content}</summary>
 														{$section/sections}
 													</article></articles>
 									return

@@ -69,59 +69,56 @@ xdmp:set-response-content-type("text/html"),
 			<div class="resultsDiv">
 				<div class="resultsLeftDiv">
 					{
-					if($searchType = "") then
-						<h1>No Search Performed</h1>
-					else
-						if($searchTerm = "") then
-							<h1>No Term in search</h1>
-						else
-							for $result in if ($searchType = "all")
-								then
-								 /article[cts:contains(., cts:word-query($searchTerm, "case-insensitive"))]
-								else
-								if ($searchType = "title")
-								then
-								 /article[cts:contains(./title, cts:word-query($searchTerm, "case-insensitive"))]
-								else
-								if ($searchType = "summary")
-								then
-								 /article[cts:contains(./summary, cts:word-query($searchTerm, "case-insensitive"))]
-								else
-								if ($searchType = "content")
-								then
-								 /article[cts:contains(./sections//section/content, cts:word-query($searchTerm, "case-insensitive"))]
-								else
-								if ($searchType = "location")
-								then
-								 /article[cts:contains(./title, cts:word-query($searchTerm, "case-insensitive"))]
-								else
-								if ($searchType = "semantics")
-								then
-								 /article[cts:contains(./title, cts:word-query($searchTerm, "case-insensitive"))]
-								else
-									()
-								let $uri := MODEL:getArticleUri($result)
-								let $article := MODEL:getXMLFromID($uri)
-									return
-									<div class="resultItemDiv">
-										<h1 class="article title">
-											{MODEL:getArticleTitle($article)}
-										</h1>
-										{
-										if (fn:string-length(MODEL:getArticleSummary($article)) > 400) then
-											<p class="article summary">{fn:concat(fn:substring($article, 0, 400), "...")}</p>
-										else
-											<p class="article summary">{MODEL:getArticleSummary($article)}</p>
-										}						
-										<div style="text-align:center">
-											<a href="Default.xqy?{$CONSTANTS:paramOperation}={$OPERATIONS:addArticleOp}&amp;{$CONSTANTS:articleUri}={$uri}&amp;{$CONSTANTS:searchType}={$searchType}&amp;{$CONSTANTS:searchTerm}={$searchTerm}">
-												<img src="/Images/add_article.png" title="add article" width="50"/>
-											</a>
-											<a onClick="javascript:ShowArticle('{$uri}')" class="link">
-												<img src="/Images/details_article.png" title="click to see full article" width="50"/>
-											</a>
-										</div>
+					if($searchTerm != "") then
+						for $result in if ($searchType = "all")
+							then
+							 /article[cts:contains(., cts:word-query($searchTerm, "case-insensitive"))]
+							else
+							if ($searchType = "title")
+							then
+							 /article[cts:contains(./title, cts:word-query($searchTerm, "case-insensitive"))]
+							else
+							if ($searchType = "summary")
+							then
+							 /article[cts:contains(./summary, cts:word-query($searchTerm, "case-insensitive"))]
+							else
+							if ($searchType = "content")
+							then
+							 /article[cts:contains(./sections//section/content, cts:word-query($searchTerm, "case-insensitive"))]
+							else
+							if ($searchType = "location")
+							then
+							 /article[cts:contains(./title, cts:word-query($searchTerm, "case-insensitive"))]
+							else
+							if ($searchType = "semantics")
+							then
+							 /article[cts:contains(./title, cts:word-query($searchTerm, "case-insensitive"))]
+							else
+								()
+							let $uri := MODEL:getArticleUri($result)
+							let $article := MODEL:getXMLFromID($uri)
+								return
+								<div class="resultItemDiv">
+									<h1 class="article title">
+										{MODEL:getArticleTitle($article)}
+									</h1>
+									{
+									if (fn:string-length(MODEL:getArticleSummary($article)) > 400) then
+										<p class="article summary">{fn:concat(fn:substring($article, 0, 400), "...")}</p>
+									else
+										<p class="article summary">{MODEL:getArticleSummary($article)}</p>
+									}						
+									<div style="text-align:center">
+										<a href="Default.xqy?{$CONSTANTS:paramOperation}={$OPERATIONS:addArticleOp}&amp;{$CONSTANTS:articleUri}={$uri}&amp;{$CONSTANTS:searchType}={$searchType}&amp;{$CONSTANTS:searchTerm}={$searchTerm}">
+											<img src="/Images/add_article.png" title="add article" width="50"/>
+										</a>
+										<a onClick="javascript:ShowArticle('{$uri}')" class="link">
+											<img src="/Images/details_article.png" title="click to see full article" width="50"/>
+										</a>
 									</div>
+								</div>
+						else
+						()
 					}	
 				</div>				
 				<div class="resultsRightDiv">
