@@ -13,10 +13,13 @@ let $xml :=
         <h1>Index of Chapters</h1>
 		<ul>
         {
-          for $articleUri in $selectionsFile/item/text()
-			  let $article := MODEL:getXMLFromID($articleUri)
+          for $articleItem in $selectionsFile/item
+			  let $article := MODEL:getXMLFromID($articleItem/text())
 			  return
-				<li>{MODEL:getArticleTitle($article)}</li>
+				  if($articleItem/@type="article") then
+									<li>{MODEL:getArticleTitle($article)}</li>
+								else
+									<li>{MODEL:getArticleTitle($article)} ({MODEL:getArticleSectionTitle($article, $articleItem/@id)})</li>
         }
         </ul>
         <Articles>
@@ -27,12 +30,11 @@ let $xml :=
 									($xml)
 								else
 									let $section := MODEL:getArticleSection($xml, $item/@id)
-									let $result := <article id="{$item/@id}">
+									let $result := <articles><article type="article" id="{$item/@id}">
 														<title>{MODEL:getArticleTitle($xml)} ({MODEL:getArticleSectionTitle($xml, $item/@id)})</title>
 														<summary>{$section/content/p}</summary>
 														{$section/sections}
-													</article>
-									(:let $_:= xdmp:save("/test/result.xml", $result):)
+													</article></articles>
 									return
 										$result
 				return
