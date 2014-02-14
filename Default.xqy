@@ -55,7 +55,6 @@ xdmp:set-response-content-type("text/html"),
 									<input type="radio" name="{$CONSTANTS:searchType}" value="title" class="radioSearch">{if($searchType = "title") then attribute checked { "yes" } else ()}</input><span class="searchSpan">Title</span>
 									<input type="radio" name="{$CONSTANTS:searchType}" value="summary" class="radioSearch">{if($searchType = "summary") then attribute checked { "yes" } else ()}</input><span class="searchSpan">Summary</span>
 									<input type="radio" name="{$CONSTANTS:searchType}" value="content" class="radioSearch">{if($searchType = "content") then attribute checked { "yes" } else ()}</input><span class="searchSpan">Content</span>
-									<input type="radio" name="{$CONSTANTS:searchType}" value="location" class="radioSearch">{if($searchType = "location") then attribute checked { "yes" } else ()}</input><span class="searchSpan">Location</span>
 									<input type="radio" name="{$CONSTANTS:searchType}" value="semantics" class="radioSearch">{if($searchType = "semantics") then attribute checked { "yes" } else ()}</input><span class="searchSpan">Semantics</span>
 								</h5>
 							</div>
@@ -87,10 +86,6 @@ xdmp:set-response-content-type("text/html"),
 							if ($searchType = "content")
 							then
 							 /article[cts:contains(./sections//section/content, cts:word-query($searchTerm, "case-insensitive"))]
-							else
-							if ($searchType = "location")
-							then
-							 /article[cts:contains(./title, cts:word-query($searchTerm, "case-insensitive"))]
 							else
 							if ($searchType = "semantics")
 							then
