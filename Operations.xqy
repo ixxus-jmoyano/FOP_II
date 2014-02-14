@@ -16,6 +16,9 @@ declare variable $upArticleOp as xs:string := "upArticle";
 (: Operation change the position of the article by giving it a lower position :)
 declare variable $downArticleOp as xs:string := "downArticle";
 
+(: Operation reset selection :)
+declare variable $reset as xs:string := "reset";
+
 (: Operation change Alfresco Credentials :)
 declare variable $changeCredentials as xs:string := "ChangeAlfrescoCredentials";
 
@@ -100,10 +103,16 @@ declare function doOperations($operation)
 						()
 				)
 			else
+			if($operation = $reset) then 
+				let $save := xdmp:set-session-field($CONSTANTS:selectionsFile, "NONE") 
+						return
+						()
+			else
 			 if ($operation=$changeCredentials) then
 				CONFIG:setData(xdmp:get-request-field("UserName"), 
 							   xdmp:get-request-field("Password"),
 							   xdmp:get-request-field("SendXMLURL"))
 			  else
 			  ()
+			
 };

@@ -1,13 +1,15 @@
 import module namespace OPERATIONS = "http://ixxus.com/operations" at "Operations.xqy";
+import module namespace CONSTANTS = "http://ixxus.com/constants" at "Constants.xqy";
+
 
 if (xdmp:get-current-user() = "BAPAS-unknown")
 then
   ( )
 else
-	OPERATIONS:doOperations(xdmp:get-request-field("operation", "NONE"))
+	OPERATIONS:doOperations(xdmp:get-request-field($CONSTANTS:paramOperation, "NONE"))
 ,
 
-xdmp:log(fn:concat("Operation performed [",xdmp:get-request-field("operation"),"]"));
+xdmp:log(fn:concat("Operation performed [",xdmp:get-request-field($CONSTANTS:paramOperation),"]"));
 
 import module namespace OPERATIONS = "http://ixxus.com/operations" at "Operations.xqy";
 
@@ -133,6 +135,9 @@ xdmp:set-response-content-type("text/html"),
 								<h3 class="article title section" style="display:inline;">
 									Title:<input type="text" id="{$CONSTANTS:publicationTitle}"/>
 									<input type="button" class="actionButton" value="Generate Publication" onclick="javascript:openWindow('Publish.xqy?{$CONSTANTS:publicationTitle}=' + document.getElementById('{$CONSTANTS:publicationTitle}').value)"/>
+									<a href="Default.xqy?{$CONSTANTS:paramOperation}={$OPERATIONS:reset}" style="margin-left:130px">
+										<img src="/Images/cross.png" title="Remove all" width="50"/>
+									</a>
 								</h3>
 									{
 									for $item in $selection/item
