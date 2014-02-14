@@ -16,10 +16,12 @@ declare function loopInline ($node as node(),  $linkDisplay as xs:string)
 {
 typeswitch ($node)
 
+	(: Element ignored :)
 	case element(sub)
 	 return
 	   ()
 
+	(: Element ignored :)
 	case element(sup)
 	 return
 	   ()
@@ -30,6 +32,13 @@ typeswitch ($node)
 	   then
 		 <i>{childrenInline($node, $linkDisplay)}</i>
 	   else ( )
+	
+	case element(p)
+	 return
+	   if ($node/node())
+	   then
+		 <p>{childrenInline($node, $linkDisplay)}</p>
+	   else ( )
 	  
 	case element(b)
 	 return
@@ -37,10 +46,6 @@ typeswitch ($node)
 	   then
 		 <b>{childrenInline($node, $linkDisplay)}</b>
 	   else ( )
-
-	case $x as element(summary)
-	return
-		<p class="article summary">{childrenInline($node, $linkDisplay)}</p>
 		
 	case $x as element(table)
 	return
@@ -48,6 +53,13 @@ typeswitch ($node)
 			<table>{childrenInline($node, $linkDisplay)}</table>
 		else
 			()
+			
+	case $x as element(div)
+	return
+		if($x[fn:contains(./@class, "thumbinner")]) then
+			<div>{childrenInline($node, $linkDisplay)}</div>
+		else
+			<div>{childrenInline($node, $linkDisplay)}</div>
 	 
 	case $x as element(tr)
 	return
@@ -89,6 +101,23 @@ typeswitch ($node)
 		else
 			()
 			
+						
+	case $x as element(img)
+	return
+		if ($node/node())
+		then
+			<p><img class="article image" src="ImageLocator.xqy?image={$x/@src}"/></p>
+		else
+			()
+	
+	case $x as element(a)
+	return
+		if ($node/node())
+		then
+			<a onClick="javascript:ShowArticle('{$x/@href}')" class="link">{childrenInline($node, $linkDisplay)}</a>
+		else
+			()
+			
 	case $x as element(content)
 	return
 		if ($node/node())
@@ -96,6 +125,10 @@ typeswitch ($node)
 			<p class="article section content">{childrenInline($node, $linkDisplay)}</p>
 		else
 		()
+	
+	case $x as element(summary)
+	return
+		<p class="article summary">{childrenInline($node, $linkDisplay)}</p>
 		
 	case $x as element(title)
 	return
@@ -137,7 +170,10 @@ typeswitch ($node)
 						}
 				</h3>
 			
-			
+	(: ********************************************************************* :)
+	(: ****This part was used to display the triples as links or/images***** :)	
+	(: ********************************************************************* :)
+	(:
 	case $x as element(linkedPages)
 	return
 	if(fn:count($x/triple)>0) then
@@ -157,7 +193,7 @@ typeswitch ($node)
 		</span>
 	else
 		()
-
+		
 	case $x as element(sem:triple)
 	return
 		let $link := $x/sem:subject
@@ -174,6 +210,13 @@ typeswitch ($node)
 					</span>
 				else
 					()
+	:)
+	(: ********************************************************************* :)
+	(: ********************************************************************* :)
+	(: ********************************************************************* :)
+	case $x as element(sem:triple)
+	return
+		()
 
 	case text()
 	 return

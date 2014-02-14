@@ -20,7 +20,7 @@ import module namespace MODEL = "http://ixxus.com/articlemodel" at "ArticleModel
 xdmp:set-response-content-type("text/html"),
 <html>
 	<head>
-		<title>Future of Publishing II</title>
+		<title>Build My Book</title>
 	    <meta http-equiv="X-UA-Compatible" content="IE=EmulateIE7" />
 		<meta http-equiv='Content-Type' content='text/html;charset=utf-8' />
 		<meta http-equiv="Expires" content="-1" />
