@@ -6,7 +6,7 @@ import module namespace CONSTANTS = "http://ixxus.com/constants" at "Constants.x
 
 let $selectionsFile := xdmp:get-session-field($CONSTANTS:selectionsFile, "NONE")
 let $publishTitle := xdmp:get-request-field($CONSTANTS:publicationTitle, "NONE")
-let $_ := xdmp:log(fn:concat("PUBLISH ARTICLE TITLE",$publishTitle))
+let $log := xdmp:log(fn:concat("PUBLISH ARTICLE TITLE",$publishTitle))
 let $xml :=
       <Publication>
         <title>{$publishTitle}</title>
@@ -42,7 +42,7 @@ let $xml :=
         }
         </Articles>
       </Publication>
-	let $_ := xdmp:set-session-field($CONSTANTS:publicationFile, $xml)    
+	let $save := xdmp:set-session-field($CONSTANTS:publicationFile, $xml)    
 	return
 		()
 ;
@@ -58,7 +58,7 @@ let $operation := xdmp:get-request-field("operation", "NONE")
 let $SendXMLURL := CONFIG:getSendXMLURL()
 let $UserName := CONFIG:getUserName()
 let $Password := CONFIG:getPassword()
-let $_ := xdmp:log(fn:concat("SENDING XML TO [",$SendXMLURL,"] with user [",$UserName,"] and password [", $Password,"]"))
+let $log := xdmp:log(fn:concat("SENDING XML TO [",$SendXMLURL,"] with user [",$UserName,"] and password [", $Password,"]"))
 return
   if ($operation = "NONE")
   then
@@ -80,7 +80,7 @@ return
     ,
       let $PrefixURL := fn:concat( fn:substring-before($SendXMLURL, "alfresco/"), "alfresco/")
       let $Results := $Response/result
-      let $_ := xdmp:log( fn:concat("GENERARING PDF URL FROM [" , xdmp:quote($Results)  , "] w") )
+      let $log := xdmp:log( fn:concat("GENERARING PDF URL FROM [" , xdmp:quote($Results)  , "] w") )
       let $PDF_ID := fn:concat($PrefixURL, fn:data($Results/transformation[type="application/pdf"]/url/text()))
       let $EPUB_ID := fn:concat($PrefixURL, fn:data($Results/transformation[type="application/epub+zip"]/url/text()))
       let $SavePathToPDF := xdmp:set-session-field("PDF_ID", $PDF_ID)
@@ -103,11 +103,11 @@ import module namespace ELEMENTPROCESS = "http://ixxus.com/elementprocess" at "F
 
 xdmp:set-response-content-type("text/html")
 ,
-let $publicationFile := xdmp:get-session-field($CONSTANTS:publicationFile, "NONE")
+let $publicationFile := xdmp:get-session-field($CONSTANTS:publicationFile, <NONE/>)
 return
   <html>
     <head>
-	      <title>{$publicationFile/title/text()}</title>
+	      <title>Publication Sample</title>
 		  <meta http-equiv="X-UA-Compatible" content="IE=EmulateIE7" />
 		  <link rel="stylesheet" type="text/css" href="styles.css?refresh{current-dateTime()}" />
 		  <meta http-equiv='Content-Type' content='text/html;charset=utf-8' />
@@ -119,7 +119,12 @@ return
 	</head>
 	<body>
 		<div class="articleModelDiv">
-			<h1 class="article title">{$publicationFile/title/text()}</h1>
+			{
+			if($publicationFile/title/text()) then 
+				<h1 class="article title">{$publicationFile/title/text()}</h1>
+			else 
+				<h1 class="article title">Publication Sample</h1>
+			}
 		    <h3 class="article title section">Index of Chapters</h3>
 			<p class="article summary">	
 				<ul>
