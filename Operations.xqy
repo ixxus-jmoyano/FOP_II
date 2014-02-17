@@ -43,7 +43,9 @@ declare function doOperations($operation)
 			let $sectionId := xdmp:get-request-field($CONSTANTS:articleSection)
 			return
 				if($selectionsFile = "NONE") then
-						xdmp:set-session-field($CONSTANTS:selectionsFile, <sessionwrapper>{OPERATIONS:getItem($articleUri, $sectionId)}</sessionwrapper>) 	
+					let $save := xdmp:set-session-field($CONSTANTS:selectionsFile, <sessionwrapper>{OPERATIONS:getItem($articleUri, $sectionId)}</sessionwrapper>) 	
+						return
+						()
 				else
 					let $itemToInsert := OPERATIONS:getItem($articleUri, $sectionId)
 					return

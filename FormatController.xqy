@@ -57,6 +57,7 @@ typeswitch ($node)
 	case $x as element(div)
 	return
 		if($x[fn:contains(./@class, "thumbinner")]) then
+			(: Do something with the images:)
 			<div>{childrenInline($node, $linkDisplay)}</div>
 		else
 			<div>{childrenInline($node, $linkDisplay)}</div>
@@ -114,7 +115,7 @@ typeswitch ($node)
 	return
 		if ($node/node())
 		then
-			<a onClick="javascript:ShowArticle('{$x/@href}')" class="link">{childrenInline($node, $linkDisplay)}</a>
+			<a onClick="javascript:navigateWithFormSubmission('{$x/@href}', '{$CONSTANTS:hiddenForm}')" class="link">{childrenInline($node, $linkDisplay)}</a>
 		else
 			()
 			
@@ -148,7 +149,7 @@ typeswitch ($node)
 						{childrenInline($node, $linkDisplay)}
 						{
 						if($linkDisplay = "Y") then
-							<a class="link" href="ArticleDetails.xqy?{$CONSTANTS:articleUri}={$articleUri}&amp;{$CONSTANTS:paramOperation}={$OPERATIONS:addArticleOp}&amp;{$CONSTANTS:articleSection}={$id}#{$id}">
+							<a class="link" href="javascript:navigateWithFormSubmission('ArticleDetails.xqy?{$CONSTANTS:articleUri}={$articleUri}&amp;{$CONSTANTS:paramOperation}={$OPERATIONS:addArticleOp}&amp;{$CONSTANTS:articleSection}={$id}#{$id}', '{$CONSTANTS:hiddenForm}')">
 								<img src="/Images/plus.png" width="15" title="Add Section to Publication"/>
 							</a>
 						else()
@@ -163,7 +164,7 @@ typeswitch ($node)
 					{childrenInline($node, $linkDisplay)}
 						{
 						if($linkDisplay = "Y") then
-							<a class="link" href="ArticleDetails.xqy?{$CONSTANTS:articleUri}={$articleUri}&amp;{$CONSTANTS:paramOperation}={$OPERATIONS:addArticleOp}&amp;{$CONSTANTS:articleSection}={$id}#{$id}">
+							<a class="link" href="javascript:navigateWithFormSubmission('ArticleDetails.xqy?{$CONSTANTS:articleUri}={$articleUri}&amp;{$CONSTANTS:paramOperation}={$OPERATIONS:addArticleOp}&amp;{$CONSTANTS:articleSection}={$id}#{$id}', '{$CONSTANTS:hiddenForm}')">
 								<img src="/Images/plus.png" width="15" title="Add Section to Publication"/>
 							</a>
 						else()
@@ -204,7 +205,7 @@ typeswitch ($node)
 				if($link/ancestor::triple/parent::linkedPages) then
 					<span>
 						<span>{MODEL:getArticleTitle(MODEL:getXMLFromID($link/text()))}</span	>
-						<a onClick="javascript:ShowArticle('{$link/text()}')" style="cursor:pointer">
+						<a onClick="javascript:navigateWithFormSubmission('{$link/text()}', '{$CONSTANTS:hiddenForm}')" style="cursor:pointer">
 							<img src="/Images/details_article.png" title="click to see full article" width="50"/>
 						</a>
 					</span>

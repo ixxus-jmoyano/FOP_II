@@ -26,3 +26,6 @@ declare variable $searchType as xs:string := "searchType";
 
 (: Var used to specify the search term :)
 declare variable $searchTerm as xs:string := "searchTerm";
+
+(: Var used to specify the hidden formId :)
+declare variable $hiddenForm as xs:string := "hiddenForm";

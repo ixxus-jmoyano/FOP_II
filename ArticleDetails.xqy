@@ -29,8 +29,22 @@ return
 		  <script type="text/javascript">function doPrint( ) {{ this.print() }} function doClose( ) {{ this.close() }}</script>
 	</head>
 	<body>
+		<div class="returnHolderDiv">
+			<a class="link" onClick="javascript:navigateWithFormSubmission('Default.xqy', '{$CONSTANTS:hiddenForm}')">
+				<img src="/Images/home.png" title="Return to search" width="50"/>
+			</a>
+		</div>
 		<div class="articleModelDiv">
 			{ELEMENTPROCESS:childrenInline($article, "Y")}
 		</div>
+		<div class="returnHolderDiv">
+			<a class="link" onClick="javascript:navigateWithFormSubmission('Default.xqy', '{$CONSTANTS:hiddenForm}')">
+				<img src="/Images/home.png" title="Return to search" width="50"/>
+			</a>
+		</div>
+		<form name="{$CONSTANTS:hiddenForm}" method="post">
+			<input type="hidden" name="{$CONSTANTS:searchTerm}" value="{xdmp:get-request-field($CONSTANTS:searchTerm, "NONE")}"/>
+			<input type="hidden" name="{$CONSTANTS:searchType}" value="{xdmp:get-request-field($CONSTANTS:searchType, "NONE")}"/>			
+		</form>
 	</body>
 </html>

@@ -109,7 +109,7 @@ xdmp:set-response-content-type("text/html"),
 										<a href="Default.xqy?{$CONSTANTS:paramOperation}={$OPERATIONS:addArticleOp}&amp;{$CONSTANTS:articleUri}={$uri}&amp;{$CONSTANTS:searchType}={$searchType}&amp;{$CONSTANTS:searchTerm}={$searchTerm}">
 											<img src="/Images/add_article.png" title="add article" width="50"/>
 										</a>
-										<a onClick="javascript:ShowArticle('{$uri}')" class="link">
+										<a href="ArticleDetails.xqy?articleUri={$uri}&amp;{$CONSTANTS:searchType}={$searchType}&amp;{$CONSTANTS:searchTerm}={$searchTerm}" class="link">
 											<img src="/Images/details_article.png" title="click to see full article" width="50"/>
 										</a>
 									</div>
