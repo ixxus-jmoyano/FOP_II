@@ -2,7 +2,7 @@ module namespace CONFIG = "http://ixxus.com/ManageConfigs" ;
 
 
 declare variable $IN_FOLDER := "C:/InDesignHub/IDML_IN/";
-declare variable $WATCHED_FOLDER := "C:/InDesignHub\IDML_WATCH/";
+declare variable $WATCHED_FOLDER := "C:/InDesignHub/IDML_WATCH/";
 declare variable $OUT_FOLDER := "C:/InDesignHub/IDML_OUT/";
 
 

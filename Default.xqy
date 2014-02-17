@@ -109,7 +109,7 @@ xdmp:set-response-content-type("text/html"),
 										<a onClick="javascript:navigateWithFormSubmission('Default.xqy?{$CONSTANTS:paramOperation}={$OPERATIONS:addArticleOp}&amp;{$CONSTANTS:articleUri}={$uri}', '{$CONSTANTS:hiddenForm}')" class="link">
 											<img src="/Images/add_article.png" title="add article" width="50"/>
 										</a>
-										<a onClick="javascript:navigateWithFormSubmission('ArticleDetails.xqy?articleUri={$uri}', '{$CONSTANTS:hiddenForm}')" class="link">
+										<a onClick="javascript:navigateWithFormSubmission('ArticleDetails.xqy?{$CONSTANTS:articleUri}={$uri}', '{$CONSTANTS:hiddenForm}')" class="link">
 											<img src="/Images/details_article.png" title="click to see full article" width="50"/>
 										</a>
 									</div>

@@ -18,13 +18,13 @@ xdmp:log(fn:concat("COMPLETED OPERATION ", $operation))
 ;
 
 
-import module namespace CONFIG             = "http://ixxus.com/ManageConfigs"       at "ManageConfigs.xqy";
+import module namespace CONFIG = "http://ixxus.com/ManageConfigs" at "ManageConfigs.xqy";
+import module namespace CONSTANTS = "http://ixxus.com/constants" at "Constants.xqy";
+import module namespace OPERATIONS = "http://ixxus.com/operations" at "Operations.xqy";
 
-declare namespace LOCAL = "http://LOCAL" ;
 
-
-declare variable $_User            := xdmp:get-current-user() ;
-declare variable $_UserName        := substring($_User, 7) ;
+declare variable $user := xdmp:get-current-user() ;
+declare variable $userName := substring($user, 7) ;
 
 
 xdmp:set-response-content-type("text/html")
@@ -51,39 +51,47 @@ else
     <script type="text/javascript" src="Javascript.js">&#160;</script>
   </head>
 
-  <body>
-      
-	<div class="resultItemDiv">
-		<h1 class="article title">Alfresco Interaction Settings</h1>    
-		<div class="article summary">
-		<p class="article summary"><h3 class="article title section">Enter username and password, and call to return PDF and ePUB</h3></p>
-			{
-			let $name := CONFIG:getUserName()
-			let $password := CONFIG:getPassword()
-			let $sendXMLURL := CONFIG:getSendXMLURL()
-			return
-				<form name="ChangeCredentials" style="margin:0px;" method="post" action="Configuration.xqy">
-						<input type="hidden" name="Operation" value="ChangeAlfrescoCredentials"/>
+  {
+	let $operation := xdmp:get-request-field($CONSTANTS:paramOperation, "NONE")
+	let $log := xdmp:log(fn:concat("Configuration peration performed [", $operation, "]"))
+	return
+		if($operation != $OPERATIONS:changeCredentials) then
+		  <body>
+			  
+			<div class="resultItemDiv">
+				<h1 class="article title">Alfresco Interaction Settings</h1>    
+				<div class="article summary">
+				<p class="article summary"><h3 class="article title section">Enter username and password, and call to return PDF and ePUB</h3></p>
+					{
+					let $name := CONFIG:getUserName()
+					let $password := CONFIG:getPassword()
+					let $sendXMLURL := CONFIG:getSendXMLURL()
+					return
+						<form name="ChangeCredentials" style="margin:0px;" method="post" action="Configuration.xqy">
+								<input type="hidden" name="{$CONSTANTS:paramOperation}" value="{$OPERATIONS:changeCredentials}"/>
 
-						<h3 class="article title section">
-							Name:
-							<input type="text" size="120" style="font-size:11px;" name="UserName" value="{$name}"></input>
-						</h3>
+								<h3 class="article title section">
+									Name:
+									<input type="text" size="120" style="font-size:11px;" name="UserName" value="{$name}"></input>
+								</h3>
 
-						<h3 class="article title section">
-							Password:
-							<input type="text" size="112" style="font-size:11px;" name="Password" value="{$password}"></input>
-						</h3>
+								<h3 class="article title section">
+									Password:
+									<input type="text" size="112" style="font-size:11px;" name="Password" value="{$password}"></input>
+								</h3>
 
-						<h3 class="article title section">
-							URL To Send XML:
-							<input type="text" size="97" style="font-size:11px;" name="SendXMLURL" value="{$sendXMLURL}"></input>
-						</h3>
-						
-						<input type="button" value="Update" class="actionButton" onClick="submit()"/>
-				</form>
-			}
-		</div>
-	</div>
-  </body>
+								<h3 class="article title section">
+									URL To Send XML:
+									<input type="text" size="97" style="font-size:11px;" name="SendXMLURL" value="{$sendXMLURL}"></input>
+								</h3>
+								
+								<input type="button" value="Update" class="actionButton" onClick="submit()" onComplete="window.close();"/>
+						</form>
+					}
+				</div>
+			</div>
+		  </body>
+		else
+			<body onload="window.close()"/>
+	}
 </html>

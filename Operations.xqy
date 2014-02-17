@@ -20,7 +20,7 @@ declare variable $downArticleOp as xs:string := "downArticle";
 declare variable $reset as xs:string := "reset";
 
 (: Operation change Alfresco Credentials :)
-declare variable $changeCredentials as xs:string := "ChangeAlfrescoCredentials";
+declare variable $changeCredentials as xs:string := "changeAlfrescoCredentials";
 
 declare private function getItem($articleUri, $id){
 	let $item := if($id) then 
@@ -113,9 +113,11 @@ declare function doOperations($operation)
 						()
 			else
 			 if ($operation=$changeCredentials) then
-				CONFIG:setData(xdmp:get-request-field("UserName"), 
+				let $save := CONFIG:setData(xdmp:get-request-field("UserName"), 
 							   xdmp:get-request-field("Password"),
 							   xdmp:get-request-field("SendXMLURL"))
+				return
+					()
 			  else
 			  ()
 			

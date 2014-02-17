@@ -115,7 +115,9 @@ typeswitch ($node)
 	return
 		if ($node/node())
 		then
-			<a onClick="javascript:navigateWithFormSubmission('{$x/@href}', '{$CONSTANTS:hiddenForm}')" class="link">{childrenInline($node, $linkDisplay)}</a>
+			<a onClick="javascript:navigateWithFormSubmission('ArticleDetails.xqy?{$CONSTANTS:articleUri}={$x/@href}', '{$CONSTANTS:hiddenForm}')" class="link">
+				{childrenInline($node, $linkDisplay)}
+			</a>
 		else
 			()
 			
