@@ -166,8 +166,8 @@ xdmp:set-response-content-type("text/html"),
 		}<!-- From the resultsLeftDiv -->
 		</div>
 		<form name="{$CONSTANTS:hiddenForm}" method="post">
-			<input type="hidden" name="{$CONSTANTS:searchTerm}" value="{xdmp:get-request-field($CONSTANTS:searchTerm, "NONE")}"/>
-			<input type="hidden" name="{$CONSTANTS:searchType}" value="{xdmp:get-request-field($CONSTANTS:searchType, "NONE")}"/>			
+			<input type="hidden" name="{$CONSTANTS:searchTerm}" value="{xdmp:get-request-field($CONSTANTS:searchTerm)}"/>
+			<input type="hidden" name="{$CONSTANTS:searchType}" value="{xdmp:get-request-field($CONSTANTS:searchType)}"/>			
 		</form>
 	</body>
 </html>
