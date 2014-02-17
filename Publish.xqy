@@ -78,18 +78,20 @@ return
     (
       xdmp:log( fn:concat("RESPONSE: ", xdmp:quote($Response) ) )
     ,
-      let $PrefixURL := fn:concat( fn:substring-before($SendXMLURL, "alfresco/"), "alfresco/")
-      let $Results := $Response/result
-      let $log := xdmp:log( fn:concat("GENERARING PDF URL FROM [" , xdmp:quote($Results)  , "] w") )
-      let $PDF_ID := fn:concat($PrefixURL, fn:data($Results/transformation[type="application/pdf"]/url/text()))
-      let $EPUB_ID := fn:concat($PrefixURL, fn:data($Results/transformation[type="application/epub+zip"]/url/text()))
-      let $SavePathToPDF := xdmp:set-session-field("PDF_ID", $PDF_ID)
-      let $SavePathToEPUB := xdmp:set-session-field("EPUB_ID", $EPUB_ID)
-      return
+      let $prefixURL := fn:concat( fn:substring-before($SendXMLURL, "alfresco/"), "alfresco/")
+      let $results := $Response/result
+      let $log := xdmp:log( fn:concat("GENERARING PDF URL FROM [" , xdmp:quote($results)  , "] w") )
+      let $pdfId := fn:concat($prefixURL, fn:data($results/transformation[type="application/pdf"]/url/text()))
+      let $epubId := fn:concat($prefixURL, fn:data($results/transformation[type="application/epub+zip"]/url/text()))
+      let $savePathToPDF := xdmp:set-session-field("PDF_ID", $pdfId)
+      let $savePathToEPUB := xdmp:set-session-field("EPUB_ID", $epubId)
+	  return
         ( )
     )
 	}catch($error){
-		xdmp:log( fn:concat("ERROR: ", xdmp:quote($error/error:message) ) )
+		let $log := xdmp:log( fn:concat("ERROR: ", xdmp:quote($error/error:message) ) )
+		return
+			()
 	}
   else
     ( )
@@ -123,9 +125,9 @@ return
 			if($publicationFile/title/text()) then 
 				<h1 class="article title">{$publicationFile/title/text()}</h1>
 			else 
-				<h1 class="article title">Publication Sample</h1>
+				<h1 class="article title">Publication File</h1>
 			}
-		    <h3 class="article title section">Index of Chapters</h3>
+			<h3 class="article title section">Index of Chapters</h3>
 			<p class="article summary">	
 				<ul>
 				{
@@ -135,13 +137,13 @@ return
 				}
 				</ul>
 			</p>
+			{
+				for $article in $publicationFile/Articles 
+					return
+					<div class="articleModelDiv">
+						{ELEMENTPROCESS:childrenInline($article, "N")}
+					</div>
+			}
 		</div>
-		{
-		for $article in $publicationFile/Articles 
-			return
-			<div class="articleModelDiv">
-				{ELEMENTPROCESS:childrenInline($article, "N")}
-			</div>
-		}
 	</body>
 </html>
