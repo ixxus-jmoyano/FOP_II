@@ -27,7 +27,7 @@ declare private function getItem($articleUri, $id){
 					<item type="section" id="{$id}">{$articleUri}</item>
 				 else
 					<item type="article" id="{MODEL:getArticleId(MODEL:getXMLFromID($articleUri))}">{$articleUri}</item>
-	let $_ := xdmp:log(fn:concat("Item Added [", $item,"->type:", $item/@type,"->id:",$item/@id, "]"))
+	let $log := xdmp:log(fn:concat("Item Added [", $item,"->type:", $item/@type,"->id:",$item/@id, "]"))
 	return
 		$item
 };
@@ -50,7 +50,9 @@ declare function doOperations($operation)
 					let $itemToInsert := OPERATIONS:getItem($articleUri, $sectionId)
 					return
 						if($selectionsFile/item[@id=($itemToInsert/@id)]) then
-							xdmp:log(fn:concat("The Item ", $itemToInsert, " has already been added"))
+							let $log := xdmp:log(fn:concat("The Item ", $itemToInsert, " has already been added"))
+							return
+								()
 						else
 							let $insert :=  mem:node-insert-child( $selectionsFile,$itemToInsert)
 							let $log := xdmp:log(fn:concat("Document Generated [",$insert,"]"))

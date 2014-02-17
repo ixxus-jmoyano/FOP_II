@@ -106,10 +106,10 @@ xdmp:set-response-content-type("text/html"),
 										<p class="article summary">{MODEL:getArticleSummary($article)}</p>
 									}						
 									<div style="text-align:center">
-										<a href="Default.xqy?{$CONSTANTS:paramOperation}={$OPERATIONS:addArticleOp}&amp;{$CONSTANTS:articleUri}={$uri}&amp;{$CONSTANTS:searchType}={$searchType}&amp;{$CONSTANTS:searchTerm}={$searchTerm}">
+										<a onClick="javascript:navigateWithFormSubmission('Default.xqy?{$CONSTANTS:paramOperation}={$OPERATIONS:addArticleOp}&amp;{$CONSTANTS:articleUri}={$uri}', '{$CONSTANTS:hiddenForm}')" class="link">
 											<img src="/Images/add_article.png" title="add article" width="50"/>
 										</a>
-										<a href="ArticleDetails.xqy?articleUri={$uri}&amp;{$CONSTANTS:searchType}={$searchType}&amp;{$CONSTANTS:searchTerm}={$searchTerm}" class="link">
+										<a onClick="javascript:navigateWithFormSubmission('ArticleDetails.xqy?articleUri={$uri}', '{$CONSTANTS:hiddenForm}')" class="link">
 											<img src="/Images/details_article.png" title="click to see full article" width="50"/>
 										</a>
 									</div>
@@ -130,7 +130,7 @@ xdmp:set-response-content-type("text/html"),
 								<h3 class="article title section" style="display:inline;">
 									Title:<input type="text" id="{$CONSTANTS:publicationTitle}"/>
 									<input type="button" class="actionButton" value="Generate Publication" onclick="javascript:openWindow('Publish.xqy?{$CONSTANTS:publicationTitle}=' + document.getElementById('{$CONSTANTS:publicationTitle}').value)"/>
-									<a href="Default.xqy?{$CONSTANTS:paramOperation}={$OPERATIONS:reset}" style="margin-left:130px">
+									<a onClick="javascript:navigateWithFormSubmission('Default.xqy?{$CONSTANTS:paramOperation}={$OPERATIONS:reset}', '{$CONSTANTS:hiddenForm}')" style="margin-left:130px" class="link">
 										<img src="/Images/cross.png" title="Remove all" width="50"/>
 									</a>
 								</h3>
@@ -145,13 +145,13 @@ xdmp:set-response-content-type("text/html"),
 													<div class="resultsLeftDiv"><p class="article summary">{MODEL:getArticleTitle($article)}</p></div>
 											}
 											<div class="resultsRightDiv">
-											<a href="Default.xqy?{$CONSTANTS:paramOperation}={$OPERATIONS:removeArticleOp}&amp;{$CONSTANTS:articleId}={$item/@id}&amp;{$CONSTANTS:searchType}={$searchType}&amp;{$CONSTANTS:searchTerm}={$searchTerm}">
+											<a onClick="javascript:navigateWithFormSubmission('Default.xqy?{$CONSTANTS:paramOperation}={$OPERATIONS:removeArticleOp}&amp;{$CONSTANTS:articleId}={$item/@id}', '{$CONSTANTS:hiddenForm}')" class="link">
 												<img src="/Images/remove_article.png" title="remove article" width="50"/>
 											</a>
-											<a href="Default.xqy?{$CONSTANTS:paramOperation}={$OPERATIONS:upArticleOp}&amp;{$CONSTANTS:articleId}={$item/@id}&amp;{$CONSTANTS:searchType}={$searchType}&amp;{$CONSTANTS:searchTerm}={$searchTerm}">
+											<a onClick="javascript:navigateWithFormSubmission('Default.xqy?{$CONSTANTS:paramOperation}={$OPERATIONS:upArticleOp}&amp;{$CONSTANTS:articleId}={$item/@id}', '{$CONSTANTS:hiddenForm}')" class="link">
 												<img src="/Images/up_article.png" title="up article" width="50"/>
 											</a>
-											<a href="Default.xqy?{$CONSTANTS:paramOperation}={$OPERATIONS:downArticleOp}&amp;{$CONSTANTS:articleId}={$item/@id}&amp;{$CONSTANTS:searchType}={$searchType}&amp;{$CONSTANTS:searchTerm}={$searchTerm}">
+											<a onClick="javascript:navigateWithFormSubmission('Default.xqy?{$CONSTANTS:paramOperation}={$OPERATIONS:downArticleOp}&amp;{$CONSTANTS:articleId}={$item/@id}', '{$CONSTANTS:hiddenForm}')" class="link">
 												<img src="/Images/down_article.png" title="down article" width="50"/>
 											</a>
 											</div>
@@ -165,5 +165,9 @@ xdmp:set-response-content-type("text/html"),
 			</div>
 		}<!-- From the resultsLeftDiv -->
 		</div>
+		<form name="{$CONSTANTS:hiddenForm}" method="post">
+			<input type="hidden" name="{$CONSTANTS:searchTerm}" value="{xdmp:get-request-field($CONSTANTS:searchTerm, "NONE")}"/>
+			<input type="hidden" name="{$CONSTANTS:searchType}" value="{xdmp:get-request-field($CONSTANTS:searchType, "NONE")}"/>			
+		</form>
 	</body>
 </html>
