@@ -22,6 +22,12 @@ declare variable $reset as xs:string := "reset";
 (: Operation change Alfresco Credentials :)
 declare variable $changeCredentials as xs:string := "changeAlfrescoCredentials";
 
+(: Import collection articles :)
+declare variable $importCollectionArticles as xs:string := "importCollectionArticles";
+
+(: Default root path - TODO change it! :)
+declare variable $rootPath as xs:string := "/app:company_home/app:guest_home/";
+
 declare private function getItem($articleUri, $id){
 	let $item := if($id) then 
 					<item type="section" id="{$id}">{$articleUri}</item>
@@ -118,7 +124,44 @@ declare function doOperations($operation)
 							   xdmp:get-request-field("SendXMLURL"))
 				return
 					()
-			  else
-			  ()
 			
+			else
+			 if ($operation=$importCollectionArticles) then
+				let $_ := saveCollectionArticles()
+				return 
+					()
+			 else
+			   ()
+			
+};
+
+declare function saveToFile($article, $fileName)
+{
+	(:Saving the found articles:) 
+	if (not(fn:doc($fileName))) then
+		try 
+		{
+			xdmp:save($fileName, $article),
+			xdmp:log(fn:concat("Saved file: ", $fileName))
+		}
+		catch ($error)
+			{
+				(
+					xdmp:log(fn:concat("Had an error with saving the page: " , $fileName)),
+					xdmp:log($error)
+				)						
+			}	
+	else ()
+};
+
+declare function saveCollectionArticles ()
+{
+	let $selectionsFile := xdmp:get-session-field($CONSTANTS:selectionsFile, "NONE")
+	let $publishTitle := xdmp:get-request-field($CONSTANTS:publicationTitle, "NONE")
+	return
+		for $articleItem in $selectionsFile/item
+			 let $article := MODEL:getXMLFromID($articleItem/text())
+			 let $fileName := fn:concat($rootPath ,$publishTitle, "_", MODEL:getArticleTitle($article), ".xml")
+			 return
+				saveToFile($article, $fileName)
 };

@@ -133,6 +133,8 @@ xdmp:set-response-content-type("text/html"),
 									<a onClick="javascript:navigateWithFormSubmission('Default.xqy?{$CONSTANTS:paramOperation}={$OPERATIONS:reset}', '{$CONSTANTS:hiddenForm}')" style="margin-left:130px" class="link">
 										<img src="/Images/cross.png" title="Remove all" width="50"/>
 									</a>
+									<br /> 
+									<input type="button" class="actionButton" value="Import" onclick="javascript:navigateWithFormSubmission('Default.xqy?{$CONSTANTS:paramOperation}={$OPERATIONS:importCollectionArticles}&amp;{$CONSTANTS:publicationTitle}=' + document.getElementById('{$CONSTANTS:publicationTitle}').value, '{$CONSTANTS:hiddenForm}')"/>
 								</h3>
 									{
 									for $item in $selection/item
